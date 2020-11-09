@@ -8,6 +8,8 @@ class ListingScreen extends StatefulWidget {
 }
 
 class _ListingScreenState extends State<ListingScreen> {
+  bool _isInputting = false;
+
   void selectClinic(String name) {
     navigateTo(
       context,
@@ -16,12 +18,33 @@ class _ListingScreenState extends State<ListingScreen> {
     );
   }
 
+  void setInput(bool value) {
+    setState(() {
+      _isInputting = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: const Text('PetDalmatian'),
+        leading: _isInputting
+            ? IconButton(
+                onPressed: () => setInput(false),
+                icon: Icon(Icons.arrow_back),
+              )
+            : null,
+        title: _isInputting ? _SearchField() : Text('PetDalmatian'),
+        actions: [
+          IconButton(
+            onPressed: () => setInput(true),
+            icon: Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: Container(
         child: ListView(
@@ -84,6 +107,22 @@ class _ListingScreenState extends State<ListingScreen> {
               onTap: () => selectClinic('Clinic C'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SearchField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: 'Search PetDalmatian',
+        hintStyle: TextStyle(
+          color: Colors.white54,
         ),
       ),
     );
